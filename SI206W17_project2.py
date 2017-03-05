@@ -55,8 +55,8 @@ except:
 ## find_urls("the internet is awesome #worldwideweb") should return [], empty list
 
 def find_urls(astring):
-	# regex = r"\bhttps?://\w+(?:\.\w+)+\b"
-	regex = r"https?://\S+((/[^.][^\s]+)|(\.([A-z][A-z]*)))"
+	regex = r"\bhttps?://\w+(?:\.\w+)+\b"
+	# regex = r"https?://\S+((/[^.][^\s]+)|(\.([A-z][A-z]*)))"
 	urls = re.findall(regex, astring)
 	return(urls)
 mystring = "http://bbc.co.uk is a valid url And https://www.gmail.com and https://gmail.com are also both valid urlsAs is http://nationalparkservice.gov/pictures/badlands But gmail.gov is not a valid url for our purposes And http://bbc.c is not a valid url for our purposes either"
