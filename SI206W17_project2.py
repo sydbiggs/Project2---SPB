@@ -10,12 +10,14 @@
 ###########
 
 ## Import statements
+import re
 import unittest
 import json
 import requests
 import tweepy
 import twitter_info # Requires you to have a twitter_info file in this directory
 from bs4 import BeautifulSoup
+
 
 ## Tweepy authentication setup
 ## Fill these in in the twitter_info.py file
@@ -34,6 +36,13 @@ api = tweepy.API(auth, parser=tweepy.parsers.JSONParser())
 ## Write the code to begin your caching pattern setup here.
 CACHE_FNAME = "206project2_caching.json"
 
+try: 
+	cache_file = open(CACHE_FNAME, 'r')
+	cache_contents = cache_file.read() # pull all into one big string
+	CACHE_DICTION = json.loads(cache_contents) # dictionary that holds all cache data  
+	cache_file.close()
+except:
+	CACHE_DICTION = {}
 
 
 ## PART 1 - Define a function find_urls.
@@ -45,8 +54,13 @@ CACHE_FNAME = "206project2_caching.json"
 ## find_urls("I love looking at websites like http://etsy.com and http://instagram.com and stuff") should return ["http://etsy.com","http://instagram.com"]
 ## find_urls("the internet is awesome #worldwideweb") should return [], empty list
 
-
-
+def find_urls(astring):
+	# regex = r"\bhttps?://\w+(?:\.\w+)+\b"
+	regex = r"https?://\S+((/[^.][^\s]+)|(\.([A-z][A-z]*)))"
+	urls = re.findall(regex, astring)
+	return(urls)
+mystring = "http://bbc.co.uk is a valid url And https://www.gmail.com and https://gmail.com are also both valid urlsAs is http://nationalparkservice.gov/pictures/badlands But gmail.gov is not a valid url for our purposes And http://bbc.c is not a valid url for our purposes either"
+find_urls(mystring)
 
 
 
