@@ -63,8 +63,6 @@ mystring = "http://bbc.co.uk is a valid url And https://www.gmail.com and https:
 find_urls(mystring)
 
 
-
-
 ## PART 2 (a) - Define a function called get_umsi_data.
 ## INPUT: N/A. No input.
 ## The function should check if there is any cached data for the UMSI directory in your cached file -- if so, return it, and if not, the function should access each page of the directory, get the HTML associated with it, append that HTML string to a list. The function should cache (save) that list when it is accumulated.
@@ -75,19 +73,47 @@ find_urls(mystring)
 ## Start with this page: https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All  
 ## End with this page: https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All&page=11 
 
+def get_umsi_data():
+	unique_identifier = "umsi_directory_data"
 
+	if unique_identifier in CACHE_DICTION:
+		print("Using cached data for UMSI directory data\n")
+		UMSI_results = CACHE_DICTION[unique_identifier] #get the data!
+		return(UMSI_results)
+	else:
+		UMSI_list = []
+		print("Getting data from UMSI website")
+		baseurl = "https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastna%20me_value=&rid=All"
+		response = requests.get(baseurl, headers={'User-Agent': 'SI_CLASS'})
+		htmldoc = response.text
+		UMSI_list.append(htmldoc)
 
+		for i in range(11):
+			baseurl = "https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All&page={}".format(i+1)
+			response = requests.get(baseurl, headers={'User-Agent': 'SI_CLASS'})
+			htmldoc = response.text
+			UMSI_list.append(htmldoc)
 
-
-
+		CACHE_DICTION[unique_identifier] = UMSI_list
+		f = open(CACHE_FNAME, "w")
+		f.write(json.dumps(CACHE_DICTION))
+		f.close()
+		return(UMSI_list)
 
 ## PART 2 (b) - Create a dictionary saved in a variable umsi_titles 
 ## whose keys are UMSI people's names, and whose associated values are those people's titles, e.g. "PhD student" or "Associate Professor of Information"...
 
+htmldoc = get_umsi_data()
+umsi_titles = {}
+for anelm in htmldoc:
+	soup = BeautifulSoup(anelm, "html.parser")
+	people = soup.find_all("div", {"class":"views-row"})
+	for p in people: #for each BS object
+		name_container = p.find("div",{"property":"dc:title"})
+		title_container = p.find("div",{"class":"field-name-field-person-titles"})
+		umsi_titles[name_container.text] = title_container.text
 
-
-
-
+print(umsi_titles)
 
 
 ## PART 3 (a) - Define a function get_five_tweets
