@@ -10,14 +10,13 @@
 ###########
 
 ## Import statements
-import re
 import unittest
 import json
 import requests
 import tweepy
 import twitter_info # Requires you to have a twitter_info file in this directory
 from bs4 import BeautifulSoup
-
+import re
 
 ## Tweepy authentication setup
 ## Fill these in in the twitter_info.py file
@@ -44,7 +43,6 @@ try:
 except:
 	CACHE_DICTION = {}
 
-
 ## PART 1 - Define a function find_urls.
 ## INPUT: any string
 ## RETURN VALUE: a list of strings that represents all of the URLs in the input string
@@ -61,7 +59,6 @@ def find_urls(astring):
 	return(urls)
 mystring = "http://bbc.co.uk is a valid url And https://www.gmail.com and https://gmail.com are also both valid urlsAs is http://nationalparkservice.gov/pictures/badlands But gmail.gov is not a valid url for our purposes And http://bbc.c is not a valid url for our purposes either"
 find_urls(mystring)
-
 
 ## PART 2 (a) - Define a function called get_umsi_data.
 ## INPUT: N/A. No input.
@@ -113,12 +110,10 @@ for anelm in htmldoc:
 		title_container = p.find("div",{"class":"field-name-field-person-titles"})
 		umsi_titles[name_container.text] = title_container.text
 
-
 ## PART 3 (a) - Define a function get_five_tweets
 ## INPUT: Any string
 ## Behavior: See instructions. Should search for the input string on twitter and get results. Should check for cached data, use it if possible, and if not, cache the data retrieved.
 ## RETURN VALUE: A list of strings: A list of just the text of 5 different tweets that result from the search.
-
 
 def get_five_tweets(astring):
 	unique_identifier = "twitter_{}".format(astring)
@@ -138,26 +133,16 @@ def get_five_tweets(astring):
 		tweet_list.append(tweet_text)
 	return(tweet_list[:5])
 
-## PART 3 (b) - Write one line of code to invoke the get_five_tweets function with the phrase "University of Michigan" and save the result in a variable five_tweets.
 
+## PART 3 (b) - Write one line of code to invoke the get_five_tweets function with the phrase "University of Michigan" and save the result in a variable five_tweets.
 five_tweets = get_five_tweets("University of Michigan")
 
-
 ## PART 3 (c) - Iterate over the five_tweets list, invoke the find_urls function that you defined in Part 1 on each element of the list, and accumulate a new list of each of the total URLs in all five of those tweets in a variable called tweet_urls_found. 
-
-#Iterate over the five_tweets list, 
-#invoke the find_urls function that you defined in Part 1 on each element of the list, and 
-#accumulate a new list (one list of strings, not a list of lists!) of each of the total URLs in all five of those tweets 
-#in a variable called tweet_urls_found. There are tests for this
 
 tweet_urls_found = []
 for avalue in five_tweets:
 	for aurl in find_urls(avalue):
 		tweet_urls_found.append(aurl)
-
-
-
-
 
 ########### TESTS; DO NOT CHANGE ANY CODE BELOW THIS LINE! ###########
 
