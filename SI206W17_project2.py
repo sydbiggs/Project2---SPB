@@ -53,7 +53,8 @@ except:
 ## find_urls("the internet is awesome #worldwideweb") should return [], empty list
 
 def find_urls(astring):
-	regex = r"\bhttps?://\w+(?:\.\w+)+\b"
+	regex = r"\bhttps?://\w+\.[A-z]{2,}[^\s]+\b"
+	# regex = r"\bhttps?://\w+(?:\.\w+)+\b"
 	# regex = r"https?://\S+((/[^.][^\s]+)|(\.([A-z][A-z]*)))"
 	urls = re.findall(regex, astring)
 	return(urls)
