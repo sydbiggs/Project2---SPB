@@ -113,8 +113,6 @@ for anelm in htmldoc:
 		title_container = p.find("div",{"class":"field-name-field-person-titles"})
 		umsi_titles[name_container.text] = title_container.text
 
-print(umsi_titles)
-
 
 ## PART 3 (a) - Define a function get_five_tweets
 ## INPUT: Any string
@@ -122,11 +120,27 @@ print(umsi_titles)
 ## RETURN VALUE: A list of strings: A list of just the text of 5 different tweets that result from the search.
 
 
-
+def get_five_tweets(astring):
+	unique_identifier = "twitter_{}".format(astring)
+	if unique_identifier in CACHE_DICTION:
+		print("Using cached data for ", astring, "\n")
+		twitter_results = CACHE_DICTION[unique_identifier] #get the data from your cache!!
+	else:
+		print("Getting data from internet for ", astring, "\n")
+		twitter_results = api.search(q = astring)
+		CACHE_DICTION[unique_identifier] = twitter_results #add to dictionary
+		f = open(CACHE_FNAME, "w") #write to file
+		f.write(json.dumps(CACHE_DICTION))
+		f.close()
+	tweet_list = [] #this is where we'll store the tweets
+	for i in range(len(twitter_results["statuses"])):
+		tweet_text = twitter_results["statuses"][i]["text"]
+		tweet_list.append(tweet_text)
+	return(tweet_list[:5])
 
 ## PART 3 (b) - Write one line of code to invoke the get_five_tweets function with the phrase "University of Michigan" and save the result in a variable five_tweets.
 
-
+five_tweets = get_five_tweets("University of Michigan")
 
 
 ## PART 3 (c) - Iterate over the five_tweets list, invoke the find_urls function that you defined in Part 1 on each element of the list, and accumulate a new list of each of the total URLs in all five of those tweets in a variable called tweet_urls_found. 
