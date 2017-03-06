@@ -58,8 +58,6 @@ def find_urls(astring):
 	# regex = r"https?://\S+((/[^.][^\s]+)|(\.([A-z][A-z]*)))"
 	urls = re.findall(regex, astring)
 	return(urls)
-mystring = "http://bbc.co.uk is a valid url And https://www.gmail.com and https://gmail.com are also both valid urlsAs is http://nationalparkservice.gov/pictures/badlands But gmail.gov is not a valid url for our purposes And http://bbc.c is not a valid url for our purposes either"
-find_urls(mystring)
 
 ## PART 2 (a) - Define a function called get_umsi_data.
 ## INPUT: N/A. No input.
